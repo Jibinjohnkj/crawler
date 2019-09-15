@@ -2,19 +2,27 @@
 {% load static %}
 {% block head %}
     <script src="{% static 'spider/js/index.js' %}"></script>
+    <script src="https://www.jsviews.com/download/jsrender.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'spider/js/index.css' %}">
 {% endblock head %}
 {% block body %}
-<form id="crawlerForm" action="/spider/get-links/">
+<form id="crawlerForm" class="needs-validation">
   <div class="form-group row">
     <label for="url" class="col-sm-2 col-form-label">URL</label>
     <div class="col-sm-10">
-        <input type="url" class="form-control" id="url" placeholder="https://www.google.com/">
+        <input type="url" pattern="https?://.+" class="form-control" id="url" placeholder="https://www.google.com/" required>
+        <div class="invalid-feedback">
+            Please provide a valid url.
+        </div>
     </div>
   </div>
   <div class="form-group row">
     <label for="depth" class="col-sm-2 col-form-label">Depth</label>
       <div class="col-sm-2">
-        <input type="number" class="form-control" id="depth" aria-describedby="depthHelp" placeholder="1">
+        <input type="number" class="form-control" id="depth" aria-describedby="depthHelp" placeholder="1" value="1" min="1" max="3" required>
+      </div>
+      <div class="invalid-feedback">
+        Please provide a integer.
       </div>
   </div>
   <div class="form-group row">
@@ -22,16 +30,47 @@
       </div>
       <div class="col-sm-10">
         <small id="depthHelp" class="form-text text-muted">
-            How deep in the site should the crawler go?
-            Smaller the depth, quicker the response
+            The maximum depth has been restricted to 3 and the maximum links generated has been restricted to 25 to promote fair usage
         </small>
       </div>
   </div>
   <div class="row">
-      <div class="col-sm-2"></div>
-      <div class="col-sm-2">
-        <button type="submit" class="btn btn-primary ">Submit</button>
-      </div>
+    <div class="col-sm-2"></div>
+    <div class="col-sm-2">
+         <button type="submit" id="submitButton" class="btn btn-primary ">Submit</button>
+         <button class="btn btn-primary" id="loadingButton" type="button" disabled style="display: none">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Loading ...
+         </button>
+    </div>
   </div>
 </form>
+
+
+<div id="searchResults">
+</div>
+
+
+
+
+<script id="linkTemplate" type="text/x-jsrender">
+<div class="mt-4">
+    <div class="alert alert-secondary">
+    {% verbatim %}
+        <a href="{{:link}}" target="_blank" class="alert-link">{{:link}}</a>
+    {% endverbatim %}
+    </div>
+</div>
+</script>
+
+<script id="imageTemplate" type="text/x-jsrender">
+  <div class="mb-3 pics animation all 2">
+  {% verbatim %}
+    <img class="img-fluid" src="{{:image}}" alt="image">
+  {% endverbatim %}
+  </div>
+</script>
+
+
 {% endblock body %}
+

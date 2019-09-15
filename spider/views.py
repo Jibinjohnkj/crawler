@@ -15,11 +15,19 @@ class IndexView(View):
 
 class GetLinksView(APIView):
 
-    def post(self, request):
-        url = request.data.get("url")
-        depth = int(request.data.get("depth", 1))
+    def get(self, request):
+        url = request.query_params.get("url")
+        depth = int(request.query_params.get("depth", 1))
 
-        c = Crawler(max_depth=depth)
-        c.spider(url)
+        c = Crawler(url, max_depth=depth)
+        return Response({'links': c.get_links()})
 
-        return Response({'pagesToVisit': c.pages_to_visit})
+class GetImagesView(APIView):
+
+    def get(self, request):
+        url = request.query_params.get("url")
+        c = Crawler(url)
+
+        # Remove duplicates
+        images = set(c.get_images())
+        return Response({'images': images, 'url': url})

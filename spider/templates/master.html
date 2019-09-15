@@ -14,7 +14,13 @@
         <div class="container">
             <div class="py-5 text-center">
                 <h2>Crawler</h2>
-                <p class="lead">A simple web crawler based on Django.</p>
+                <p class="lead">A simple image scrapper based on Django.</p>
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show" id ="error" role="alert" style="display: none">
+                <strong>The connection timed out !</strong> Please try again after reducing the depth.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                   <span aria-hidden="true">&times;</span>
+                </button>
             </div>
         {% block body %}{% endblock body %}
         </div>
